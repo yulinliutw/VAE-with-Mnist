@@ -70,6 +70,7 @@ python eval.py
 - The part visualization result
    
 - Something special
+
 I use the L2 loss as the reconstruction loss term in VAE in the first time training, but I got the imperfect result is shown as below(50 epochs).
 
 <p align="center"><img src="https://github.com/yulinliutw/VAE-with-Mnist/blob/master/expimg/exp_l2lossonly.png" alt=" "  height='230px' width='230px'></p>
