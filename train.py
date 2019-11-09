@@ -18,11 +18,11 @@ parser.add_argument('--batch',
                     help  ='training batch setting')
 parser.add_argument('--learning_rate',
                     type = float,
-                    default = 0.0002,
+                    default = 0.00002,
                     help = 'learning rate setting')
 
 parser.add_argument('--save_weight_dir',
-                    default = './weight_train_test/',
+                    default = './weight_train/',
                     help    = 'Path to folder of saving weight')
 parser.add_argument('--log_dir',
                     default = './log/',
@@ -50,11 +50,11 @@ output = decoder(mu,log_sigma)
     
 '''define the loss''' 
 with tf.name_scope("Loss_function"):   
-    loss_l2 = tf.reduce_mean(tf.norm(output-data, ord='euclidean',axis = 1),name = 'loss_l2')
+    loss_l2 = tf.reduce_mean(tf.norm(tf.sigmoid(output)-data, ord='euclidean',axis = 1),name = 'loss_l2')
     loss_bce = tf.reduce_mean(tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits = output, labels = data), reduction_indices = 1),name = 'loss_bce') #Optmize the Ez∼Q[logP(X|z)] , just check the paper 
     loss_KLD = tf.reduce_mean(0.5 * tf.reduce_sum(tf.exp(log_sigma) + tf.pow(mu, 2) - log_sigma - 1, reduction_indices = 1),name = 'loss_KLD') #Optmize the D[Q(z|X)∥P(z)] , just check the paper 
-    loss_total = 0.5 * loss_l2 + 0.5 * loss_bce + loss_KLD   
-    RMSE = tf.sqrt(tf.reduce_mean(tf.pow(output-data,2)),name = 'RMSE')
+    loss_total = loss_l2 + loss_bce + loss_KLD   
+    RMSE = tf.reduce_mean(tf.sqrt(tf.reduce_sum(tf.square(tf.sigmoid(output)-data),reduction_indices = 1)/784),name = 'RMSE')
     '''add the loss to the tensorboard'''
     tf.summary.scalar('loss_l2',loss_l2)
     tf.summary.scalar('loss_bce', loss_bce)
@@ -104,7 +104,7 @@ for ep in range(args.epoch) :
             summary_writer_train.add_summary(summary_train,int(mnist.train.images.shape[0]/args.batch)*ep+step+1)
             summary_val,l2_loss,bce_loss_val,kld_loss_val,total_loss_val,rmse_val= sess.run([merged,loss_l2,loss_bce,loss_KLD,loss_total,RMSE], feed_dict = { data: batch_x_val })
             summary_writer_val.add_summary(summary_val,int(mnist.train.images.shape[0]/args.batch)*ep+step+1)
-            current_result = sess.run([output], feed_dict = { data: batch_x }) 
+            current_result = sess.run([tf.sigmoid(output)], feed_dict = { data: batch_x }) 
             current_result = np.reshape(current_result,(-1,28,28))
             plt.figure()
             plt.title('VAE outoput')     

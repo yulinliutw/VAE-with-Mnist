@@ -68,7 +68,7 @@ for img_idx in range(6):
     plt.imshow(current_result[img_idx,:,:], cmap='gray')        
 plt.show() 
 filename = os.path.join(args.save_weight_dir,'ep_'+str(ep+1),'checkpoint_ep'+str(ep+1)+'.ckpt')
-save_path = saver.save(sess,filename, global_step=step+1)
+
 
 '''show some generation result'''  
 current_result = sess.run([output], feed_dict = { data: batch_x }) 
@@ -80,4 +80,3 @@ for img_idx in range(6):
     plt.imshow(current_result[img_idx,:,:], cmap='gray')        
 plt.show() 
 filename = os.path.join(args.save_weight_dir,'ep_'+str(ep+1),'checkpoint_ep'+str(ep+1)+'.ckpt')
-save_path = saver.save(sess,filename, global_step=step+1)
