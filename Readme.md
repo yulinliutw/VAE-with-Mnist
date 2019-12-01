@@ -81,8 +81,5 @@ I use the L2 loss as the reconstruction loss term in VAE in the first time train
 <p align="center"><img src="https://github.com/yulinliutw/VAE-with-Mnist/blob/master/expimg/exp_l2lossonly.png" alt=" "  height='230px' width='230px'></p>
 
    It seems like this loss only can make the model roughly distinguish the foreground and background part, I think that's because the curve of L2 loss is very smooth, so the  gradient for optimization will become very small when the output become close to the ground truth, then model may stop to learn early, in this case, it's not good.
-   Thus I  find out some researcher use the cross entropy loss to slove this problem, this loss provide the steep curve may will handle this problem,and the value in our data is between 0~1, it's legal to use this loss, the training result is shown as below(50 epoches).
-   
- <p align="center"><img src="https://github.com/yulinliutw/VAE-with-Mnist/blob/master/expimg/exp_bcelossonly.png" alt=" "  height='230px' width='230px'></p>  
-  It seems like this loss only can make the model roughly build the number, but the result is blur and the background  looks bad, base on two experiment result, It's better that we consider two loss both, it can make the model consider all the thing provide by these loss functions.  
+   Thus I  find out some researcher use the cross entropy loss to slove this problem, this loss provide the steep curve may will handle this problem,and the value in our data is between 0~1, it's legal to use this loss, the training result is shown in  *eval.py*.
 
