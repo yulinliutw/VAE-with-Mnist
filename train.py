@@ -107,6 +107,7 @@ for ep in range(args.epoch) :
                 plt.subplot(3,2,img_idx+1)
                 plt.imshow(current_result[img_idx,:,:], cmap='gray')        
             plt.show() 
+            plt.axis('off')
             filename = os.path.join(args.save_weight_dir,'ep_'+str(ep+1),'checkpoint_ep'+str(ep+1)+'.ckpt')
             save_path = saver.save(sess,filename, global_step=step+1)
 

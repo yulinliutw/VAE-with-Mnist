@@ -69,10 +69,10 @@ python eval_genresult.py
 ## Performance
 ---
 - I train this model about 100 epoch.
-- Current performance(RMSE):
+- Current performance(RMSE): 0.12007759
 - The part visualization result(input the random value to the decoder)
 
-    <p align="center"><img src="" alt=" "  height='230px' width='230px'></p> 
+    <p align="center"><img src="https://github.com/yulinliutw/VAE-with-Mnist/blob/master/expimg/exp_final.png" alt=" "  height='230px' width='230px'></p> 
     
 - Something special
 

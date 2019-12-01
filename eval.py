@@ -14,7 +14,7 @@ parser.add_argument('--batch',
                     help='testing batch setting')
 
 parser.add_argument('--load_weight_dir',
-                    default = '', 
+                    default = './weight_train/ep_50/checkpoint_ep50.ckpt-550', 
                     help    = 'Path to folder of loading weight')
 '''gobal setting'''
 global args
@@ -60,7 +60,8 @@ plt.figure()
 plt.title('VAE rescontrust outoput')     
 for img_idx in range(100):
     plt.subplot(10,10,img_idx+1)
-    plt.imshow(current_result[img_idx,:,:], cmap='gray')        
+    plt.imshow(current_result[img_idx,:,:], cmap='gray')      
+    plt.axis('off')
 plt.show() 
 
 
