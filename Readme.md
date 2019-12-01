@@ -54,21 +54,26 @@ tensorboard --logdir=run1:"./log/train",run2:"./log/val"
 
 ## Evaluation
 ---
-Run the eval.py will show some result from model . 
+Run the eval.py and eval_genresult.py will show some result from model . 
 
-- Open the *eval.py* and check the argparse setting to understand the evaluation parameters.
+- Open the *eval.py* and *eval_genresult.py* to check the argparse setting.
 - Using the argparse for evaluation parameter setting.
-- Start the evualation.
+- Start two evualation respectively.
 ```Shell
 python eval.py
+```
+```Shell
+python eval_genresult.py
 ```
 
 ## Performance
 ---
-- I train this model about 40 epoch.
+- I train this model about 100 epoch.
 - Current performance(RMSE):
-- The part visualization result
-   
+- The part visualization result(input the random value to the decoder)
+
+    <p align="center"><img src="" alt=" "  height='230px' width='230px'></p> 
+    
 - Something special
 
 I use the L2 loss as the reconstruction loss term in VAE in the first time training, but I got the imperfect result is shown as below(50 epochs).

@@ -2,7 +2,6 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import pickle
 from model import encoder,decoder
 import os
 
@@ -10,7 +9,7 @@ import os
 parser = argparse.ArgumentParser(description='VAE_train: Inference Parameters')
 parser.add_argument('--epoch',
                     type = int,
-                    default = 50,
+                    default = 100,
                     help = 'training epoch setting')
 parser.add_argument('--batch',
                     type = int,
@@ -18,7 +17,7 @@ parser.add_argument('--batch',
                     help  ='training batch setting')
 parser.add_argument('--learning_rate',
                     type = float,
-                    default = 0.00002,
+                    default = 0.0002,
                     help = 'learning rate setting')
 
 parser.add_argument('--save_weight_dir',
@@ -31,10 +30,6 @@ parser.add_argument('--log_dir',
 parser.add_argument('--load_weight_dir',
                     default = '', 
                     help    = 'Path to folder of loading weight')
-parser.add_argument('--gpuid',
-                    default = 0,
-                    type    = int,
-                    help    = 'GPU device ids (CUDA_VISIBLE_DEVICES)')
 '''gobal setting'''
 global args
 args = parser.parse_args()
@@ -51,7 +46,7 @@ output = decoder(mu,log_sigma)
 '''define the loss''' 
 with tf.name_scope("Loss_function"):   
     loss_l2 = tf.reduce_mean(tf.norm(tf.sigmoid(output)-data, ord='euclidean',axis = 1),name = 'loss_l2')
-    loss_bce = tf.reduce_mean(tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits = output, labels = data), reduction_indices = 1),name = 'loss_bce') #Optmize the Ez∼Q[logP(X|z)] , just check the paper 
+    loss_bce = tf.reduce_mean(tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits = output, labels = data), axis = 1),name = 'loss_bce') #Optmize the Ez∼Q[logP(X|z)] , just check the paper 
     loss_KLD = tf.reduce_mean(0.5 * tf.reduce_sum(tf.exp(log_sigma) + tf.pow(mu, 2) - log_sigma - 1, reduction_indices = 1),name = 'loss_KLD') #Optmize the D[Q(z|X)∥P(z)] , just check the paper 
     loss_total = loss_l2 + loss_bce + loss_KLD   
     RMSE = tf.reduce_mean(tf.sqrt(tf.reduce_sum(tf.square(tf.sigmoid(output)-data),reduction_indices = 1)/784),name = 'RMSE')
@@ -87,7 +82,7 @@ except:
 merged = tf.summary.merge_all()
 '''create two summary writer for showing the train and test together'''
 '''command : tensorboard --logdir=run1:"./log/train",run2:"./log/val" '''
-summary_writer_train = tf.summary.FileWriter(args.log_dir+'/train', sess.graph)
+summary_writer_train = tf.summary.FileWriter(args.log_dir+'train', sess.graph)
 summary_writer_val = tf.summary.FileWriter(args.log_dir+'val')
 
 saver = tf.train.Saver(max_to_keep = 0)
